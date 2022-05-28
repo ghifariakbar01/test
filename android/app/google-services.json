@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "102657324260",
+    "project_id": "jalin-desa",
+    "storage_bucket": "jalin-desa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102657324260:android:e5dbb034024cf4905e68f1",
+        "android_client_info": {
+          "package_name": "com.akbar.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "102657324260-pn18h1spakgeb4f6gp052koqr08a7p6h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPj9YIUh1QJViyGHqPhZRbqJo6WdtiFPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "102657324260-pn18h1spakgeb4f6gp052koqr08a7p6h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
