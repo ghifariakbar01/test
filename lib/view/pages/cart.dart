@@ -17,15 +17,36 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   Map<String, String> qtyCart = Map<String, String>();
   Map<String, dynamic> basket;
+  Map<String, String> finalPriceEachItem = Map<String, String>();
+  String finalPrice;
 
   @override
   void initState() {
     super.initState();
     basket = Provider.of<Map<String, dynamic>>(context, listen: false);
+
     widget.items.forEach((item) {
+      int qtyTemp = 0;
       if (!qtyCart.containsKey(item.id)) {
         qtyCart[item.id] = '1';
+      } else {
+        qtyTemp = int.parse(qtyCart[item.id]);
+        qtyTemp++;
+        qtyCart[item.id] = qtyTemp.toString();
       }
+    });
+    calcTotalPrice();
+  }
+
+  void calcTotalPrice() {
+    finalPriceEachItem.clear();
+    finalPrice = '0';
+    widget.items.forEach((item) {
+      finalPriceEachItem[item.id] =
+          (int.parse(qtyCart[item.id]) * int.parse(item.price)).toString();
+      finalPrice =
+          (int.parse(finalPrice) + int.parse(finalPriceEachItem[item.id]))
+              .toString();
     });
   }
 
@@ -35,6 +56,44 @@ class _CartPageState extends State<CartPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Produk yang akan anda pesan"),
+      ),
+      bottomSheet: Container(
+        padding: EdgeInsets.all(5),
+        height: 50,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Total harga"),
+                Text(
+                  "Rp $finalPrice",
+                  style: TextStyle(fontSize: 11, color: Colors.orange),
+                )
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              width: 100,
+              height: 40,
+              decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: FlatButton(
+                onPressed: () {
+                  widget.updateTotal(basket);
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Order",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       body:
           // ListView of items from basket["items"]
@@ -59,52 +118,70 @@ class _CartPageState extends State<CartPage> {
               ),
               trailing: SizedBox(
                 width: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: 50,
+                child: Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          if (qtyCart[widget.items[index].id] == '1') {
-                            qtyCart.remove(widget.items[index].id);
-                            widget.items.remove(widget.items[index]);
-                            basket["total_item"] -= 1;
-                            widget.updateTotal(basket);
-                          } else {
-                            qtyCart[widget.items[index].id] =
-                                (int.parse(qtyCart[widget.items[index].id]) - 1)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (qtyCart[widget.items[index].id] == '1') {
+                                qtyCart.remove(widget.items[index].id);
+                                widget.items.remove(widget.items[index]);
+                                basket["total_item"] -= 1;
+                                widget.updateTotal(basket);
+                              } else {
+                                qtyCart[widget.items[index].id] = (int.parse(
+                                            qtyCart[widget.items[index].id]) -
+                                        1)
                                     .toString();
-                          }
-                        });
-                      },
-                      child: Container(
-                          // color red
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          width: 20,
-                          height: 20,
-                          child: Icon(
-                            Icons.minimize,
-                            size: 11,
-                            color: Colors.white,
-                          )),
-                    ),
-                    Text("${qtyCart[widget.items[index].id]}"),
-                    Container(
-                      // color red
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                              }
+                              calcTotalPrice();
+                            });
+                          },
+                          child: Container(
+                              // color red
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              width: 20,
+                              height: 20,
+                              child: Icon(
+                                Icons.minimize,
+                                size: 11,
+                                color: Colors.white,
+                              )),
+                        ),
+                        Text("${qtyCart[widget.items[index].id]}"),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              qtyCart[widget.items[index].id] =
+                                  (int.parse(qtyCart[widget.items[index].id]) +
+                                          1)
+                                      .toString();
+                              calcTotalPrice();
+                            });
+                          },
+                          child: Container(
+                            // color red
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
 
-                      child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child:
-                              Icon(Icons.add, size: 11, color: Colors.white)),
-                    )
+                            child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: Icon(Icons.add,
+                                    size: 11, color: Colors.white)),
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ));

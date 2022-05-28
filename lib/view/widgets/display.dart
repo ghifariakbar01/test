@@ -76,9 +76,9 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
                 ),
                 child: Center(
                   child: Text(
-                    basket["total_item"] == null
+                    basket["items"] == null
                         ? "0"
-                        : basket["total_item"].toString(),
+                        : basket["items"].length.toString(),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10,
@@ -99,7 +99,6 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
             if (snapshot.hasData) {
               return GridView.builder(
                 itemCount: items.length,
-                // grid 2 horizontal max
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
@@ -110,10 +109,6 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
                   return InkWell(
                     onTap: () {
                       setState(() {
-                        basket["total_item"] == 0 ||
-                                basket["total_item"] == null
-                            ? basket["total_item"] = 1
-                            : basket["total_item"] += 1;
                         if (basket["items"] == null) {
                           listItems.add(items[index]);
                           basket["items"] = listItems;
