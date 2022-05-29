@@ -24,6 +24,7 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     basket = Provider.of<Map<String, dynamic>>(context, listen: false);
+    List<Item> allSameItem = [];
 
     widget.items.forEach((item) {
       int qtyTemp = 0;
@@ -33,9 +34,15 @@ class _CartPageState extends State<CartPage> {
         qtyTemp = int.parse(qtyCart[item.id]);
         qtyTemp++;
         qtyCart[item.id] = qtyTemp.toString();
+        allSameItem.add(item);
       }
     });
     calcTotalPrice();
+    allSameItem.forEach((element) {
+      if (widget.items.contains(element)) {
+        widget.items.remove(element);
+      }
+    });
   }
 
   void calcTotalPrice() {
@@ -130,7 +137,6 @@ class _CartPageState extends State<CartPage> {
                               if (qtyCart[widget.items[index].id] == '1') {
                                 qtyCart.remove(widget.items[index].id);
                                 widget.items.remove(widget.items[index]);
-                                basket["total_item"] -= 1;
                                 widget.updateTotal(basket);
                               } else {
                                 qtyCart[widget.items[index].id] = (int.parse(

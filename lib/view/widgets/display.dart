@@ -91,7 +91,6 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
         ),
       ),
       body: SizedBox(
-        width: double.infinity,
         child: FutureBuilder<List<Item>>(
           future: ALLVm.getItems(baseUrl),
           builder: (_, AsyncSnapshot snapshot) {
@@ -119,110 +118,141 @@ class _DisplayPhotoState extends State<DisplayPhoto> {
                       });
                     },
                     child: Container(
-                      width: 210,
-                      height: 300,
+                      width: 200,
+                      height: 200,
                       margin: EdgeInsets.all(5.0),
                       child: Card(
                         elevation: 5.0,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              padding: EdgeInsets.all(10.0),
+                              width: 200,
+                              height: 182,
+                              padding: EdgeInsets.all(5.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    items[index].title,
-                                    style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold),
+                                  Flexible(
+                                    flex: 2,
+                                    child: Text(
+                                      items[index].title,
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  Text(
-                                    "Rp ${items[index].price}",
-                                    style: TextStyle(
-                                        fontSize: 14.0, color: Colors.orange),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Text(
+                                      "Rp ${items[index].price}",
+                                      style: TextStyle(
+                                          fontSize: 14.0, color: Colors.orange),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        color: Colors.grey,
-                                        size: 14,
-                                      ),
-                                      Text(
-                                        items[index].locationName.name,
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 210,
-                                    height: 86,
+                                  Flexible(
+                                    flex: 0,
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
-                                        Flexible(
-                                          flex: 1,
-                                          child: Icon(
-                                            Icons.person,
-                                            size: 14.0,
-                                            color: Colors.grey,
+                                        Icon(
+                                          Icons.location_on,
+                                          color: Colors.grey,
+                                          size: 11,
+                                        ),
+                                        Text(
+                                          items[index].locationName.name,
+                                          style: TextStyle(
+                                            fontSize: 11.0,
                                           ),
                                         ),
-                                        Flexible(
-                                          flex: 3,
-                                          child: Text(
-                                            items[index].user.userName,
-                                            style: TextStyle(
-                                              fontSize: 14.0,
-                                            ),
-                                          ),
-                                        ),
-                                        items[index].isHalal == "1"
-                                            ? Flexible(
-                                                flex: 1,
-                                                child: SizedBox(
-                                                  width: 50,
-                                                  height: 50,
-                                                  child: Image.asset(
-                                                      "assets/halal.png"),
-                                                ),
-                                              )
-                                            : Flexible(
-                                                flex: 1, child: Container())
                                       ],
                                     ),
                                   ),
-                                  items[index].isAvailable != "0"
-                                      ? Container(
-                                          padding: EdgeInsets.all(5.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            color: Colors.blue,
-                                            border: Border.all(
-                                              color: Colors.green,
-                                              width: 1.0,
+                                  Flexible(
+                                    flex: 3,
+                                    child: SizedBox(
+                                      height: 50,
+                                      width: 150,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: Icon(
+                                              Icons.person,
+                                              size: 12.0,
+                                              color: Colors.grey,
                                             ),
                                           ),
-                                          child: Text(
-                                            "READY STOK",
-                                            style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: Colors.white,
+                                          Flexible(
+                                            flex: 2,
+                                            child: Text(
+                                              // if name more than 20 characters show ...
+                                              items[index]
+                                                          .addedUserName
+                                                          .length >
+                                                      20
+                                                  ? items[index]
+                                                          .addedUserName
+                                                          .substring(0, 20) +
+                                                      "..."
+                                                  : items[index].addedUserName,
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                              ),
+                                            ),
+                                          ),
+                                          items[index].isHalal == "1"
+                                              ? Flexible(
+                                                  flex: 2,
+                                                  child: SizedBox(
+                                                    width: 50,
+                                                    height: 50,
+                                                    child: Image.asset(
+                                                        "assets/halal.png"),
+                                                  ),
+                                                )
+                                              : Flexible(
+                                                  flex: 0, child: Container())
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  items[index].isAvailable != "0"
+                                      ? Flexible(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.all(5.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              color: Colors.blue,
+                                              border: Border.all(
+                                                color: Colors.green,
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                            child: Text(
+                                              "READY STOK",
+                                              style: TextStyle(
+                                                fontSize: 11.0,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         )
-                                      : Text(
-                                          "KOSONG",
-                                          style: TextStyle(
-                                            fontSize: 14.0,
+                                      : Flexible(
+                                          flex: 1,
+                                          child: Text(
+                                            "KOSONG",
+                                            style: TextStyle(
+                                              fontSize: 11.0,
+                                            ),
                                           ),
                                         ),
                                 ],
